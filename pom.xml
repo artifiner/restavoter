@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>ru.javawebinar</groupId>
     <artifactId>restavoter</artifactId>
     <packaging>war</packaging>
 
@@ -21,19 +21,38 @@
         <spring.version>5.2.8.RELEASE</spring.version>
         <spring.security.version>5.3.3.RELEASE</spring.security.version>
         <spring-data-jpa.version>2.3.2.RELEASE</spring-data-jpa.version>
+        <spring.security.version>5.3.3.RELEASE</spring.security.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.4.18.Final</hibernate.version>
+        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
 
     </properties>
 
     <build>
         <finalName>restavoter</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
         <defaultGoal>package</defaultGoal>
 
     </build>
 
     <dependencies>
+
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -46,11 +65,28 @@
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
         <!-- ORM -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
 
         <!-- DB -->
