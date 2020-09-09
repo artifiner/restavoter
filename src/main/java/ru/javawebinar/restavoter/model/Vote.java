@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
+@Table(name = "votes")
 public class Vote extends AbstractBaseEntity {
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
@@ -22,4 +23,47 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
+
+    public Vote() {
+    }
+
+    public Vote(Integer id, @NotNull Date dateTime, User user, Restaurant restaurant) {
+        super(id);
+        this.dateTime = dateTime;
+        this.user = user;
+        this.restaurant = restaurant;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", dateTime=" + dateTime +
+                '}';
+    }
+
 }
