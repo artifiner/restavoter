@@ -5,14 +5,14 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes")
 public class Vote extends AbstractBaseEntity {
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    private Date dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -27,18 +27,18 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(Integer id, @NotNull Date dateTime, User user, Restaurant restaurant) {
+    public Vote(Integer id, @NotNull LocalDateTime dateTime, User user, Restaurant restaurant) {
         super(id);
         this.dateTime = dateTime;
         this.user = user;
         this.restaurant = restaurant;
     }
 
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

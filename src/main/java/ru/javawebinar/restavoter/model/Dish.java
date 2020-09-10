@@ -5,7 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dishes")
@@ -16,7 +16,7 @@ public class Dish extends AbstractNamedEntity {
 
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    private Date dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -26,7 +26,7 @@ public class Dish extends AbstractNamedEntity {
     public Dish() {
     }
 
-    public Dish(Integer id, String name, @NotNull Integer price, @NotNull Date dateTime, Restaurant restaurant) {
+    public Dish(Integer id, String name, @NotNull Integer price, @NotNull LocalDateTime dateTime, Restaurant restaurant) {
         super(id, name);
         this.price = price;
         this.dateTime = dateTime;
@@ -41,11 +41,11 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

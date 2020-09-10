@@ -1,8 +1,11 @@
 package ru.javawebinar.restavoter.repository;
 
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.restavoter.model.User;
 import ru.javawebinar.restavoter.model.Vote;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Repository
@@ -28,6 +31,11 @@ public class VoteRepository {
 
     public Vote get(int id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public Vote getByUserToday(User user, LocalDateTime now) {
+        LocalDateTime today = now.truncatedTo(ChronoUnit.DAYS);
+        return repository.getByUserIdAndDateTimeBetween(user.getId(), today, today.plusDays(1));
     }
 
     public List<Vote> getAll() {

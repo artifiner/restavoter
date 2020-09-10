@@ -3,6 +3,8 @@ package ru.javawebinar.restavoter.repository;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.restavoter.model.Dish;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Repository
@@ -28,6 +30,11 @@ public class DishRepository {
 
     public Dish get(int id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public List<Dish> getAllByRestaurantToday(int restaurantId, LocalDateTime now) {
+        LocalDateTime today = now.truncatedTo(ChronoUnit.DAYS);
+        return repository.getAllByRestaurantIdAndDateTimeBetween(restaurantId, today, today.plusDays(1));
     }
 
     public List<Dish> getAll() {
