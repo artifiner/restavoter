@@ -33,9 +33,9 @@ public class VoteRepository {
         return repository.findById(id).orElse(null);
     }
 
-    public Vote getByUserToday(User user, LocalDateTime now) {
+    public Vote getByUserIdToday(int userId, LocalDateTime now) {
         LocalDateTime today = now.truncatedTo(ChronoUnit.DAYS);
-        return repository.getByUserIdAndDateTimeBetween(user.getId(), today, today.plusDays(1));
+        return repository.getByUserIdAndDateTimeBetween(userId, today, today.plusDays(1));
     }
 
     public List<Vote> getAll() {
