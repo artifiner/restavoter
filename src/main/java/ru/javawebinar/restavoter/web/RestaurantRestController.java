@@ -4,23 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.javawebinar.restavoter.AuthorizedUser;
 import ru.javawebinar.restavoter.model.Dish;
 import ru.javawebinar.restavoter.model.Restaurant;
-import ru.javawebinar.restavoter.model.Vote;
 import ru.javawebinar.restavoter.repository.DishRepository;
 import ru.javawebinar.restavoter.repository.RestaurantRepository;
-import ru.javawebinar.restavoter.repository.VoteRepository;
-import ru.javawebinar.restavoter.util.exception.DeadlinePassedException;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.restavoter.util.ValidationUtil.*;
@@ -46,6 +39,11 @@ public class RestaurantRestController {
     @GetMapping
     public List<Restaurant> getAll() {
         return repository.getAll();
+    }
+
+    @GetMapping("/with_menu")
+    public List<Restaurant> getAllWithMenu() {
+        return repository.getAllWithDishesByDate(LocalDate.now());
     }
 
     @DeleteMapping("/{id}")

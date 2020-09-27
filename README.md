@@ -16,6 +16,7 @@ Each restaurant provides a new menu each day.
  * /rest/restaurants
     - /{id} GET - Get the restaurant with id = {id}
     - GET - Get a full list of restaurants
+    - /with_menu GET - Get a list of restaurants which have menu for today with dishes
     - /{id}/menu GET - Get a daily menu (list of dishes) for the restaurant with id = {id}
     - POST - Create a restaurant (role ADMIN required)
     - /{id} PUT - Update the restaurant with id = {id} (role ADMIN required)
@@ -35,6 +36,9 @@ Each restaurant provides a new menu each day.
 
 #### get all restaurants
 `curl -s http://localhost:8080/restavoter/rest/restaurants --user user@yandex.ru:password`
+
+#### get all restaurants with today menu
+`curl -s http://localhost:8080/restavoter/rest/restaurants/with_menu --user user@yandex.ru:password`
 
 #### get restaurant 100004
 `curl -s http://localhost:8080/restavoter/rest/restaurants/100004 --user user@yandex.ru:password`

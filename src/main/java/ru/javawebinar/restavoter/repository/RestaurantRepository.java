@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.restavoter.model.Restaurant;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,6 +29,11 @@ public class RestaurantRepository {
     @Cacheable("restaurants")
     public Restaurant get(int id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Cacheable("restaurants")
+    public List<Restaurant> getAllWithDishesByDate(LocalDate date) {
+        return repository.getAllWithDishesByDate(date);
     }
 
     @Cacheable("restaurants")
