@@ -11,6 +11,9 @@ import ru.javawebinar.restavoter.model.User;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.javawebinar.restavoter.util.ValidationUtil.getRootCause;
+
 public class TestUtil {
     public static String getContent(MvcResult result) throws UnsupportedEncodingException {
         return result.getResponse().getContentAsString();
@@ -40,4 +43,16 @@ public class TestUtil {
     public static RequestPostProcessor userAuth(User user) {
         return SecurityMockMvcRequestPostProcessors.authentication(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
     }
+
+    //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
+    public static  <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
+    }
+
 }

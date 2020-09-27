@@ -12,6 +12,7 @@ import ru.javawebinar.restavoter.model.Restaurant;
 import ru.javawebinar.restavoter.repository.DishRepository;
 import ru.javawebinar.restavoter.repository.RestaurantRepository;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -56,7 +57,7 @@ public class RestaurantRestController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         assureIdConsistent(restaurant, id);
         Assert.notNull(restaurant, "Restaurant must be not null");
         checkNotFoundWithId(repository.save(restaurant), id);
@@ -64,7 +65,7 @@ public class RestaurantRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         checkNew(restaurant);
         Assert.notNull(restaurant, "Restaurant must be not null");
         Restaurant created = repository.save(restaurant);

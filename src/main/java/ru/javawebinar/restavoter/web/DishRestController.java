@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.restavoter.model.Dish;
 import ru.javawebinar.restavoter.repository.DishRepository;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class DishRestController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void update(@RequestBody Dish dish, @PathVariable int id) {
+    public void update(@Valid @RequestBody Dish dish, @PathVariable int id) {
         assureIdConsistent(dish, id);
         Assert.notNull(dish, "Dish must be not null");
         checkNotFoundWithId(repository.save(dish), id);
@@ -54,7 +55,7 @@ public class DishRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Dish> create(@RequestBody Dish dish) {
+    public ResponseEntity<Dish> create(@Valid @RequestBody Dish dish) {
         checkNew(dish);
         Assert.notNull(dish, "Dish must be not null");
         Dish created = repository.save(dish);

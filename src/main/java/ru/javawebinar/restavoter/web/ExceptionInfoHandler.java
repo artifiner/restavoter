@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,7 +32,7 @@ import static ru.javawebinar.restavoter.util.exception.ErrorType.*;
 public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
-    private static final Map<String, String> CONSTRAINS_ERROR_MESSAGES = Map.of(
+    public static final Map<String, String> CONSTRAINS_ERROR_MESSAGES = Map.of(
             "users_unique_email_idx", "User with this email is already exists",
             "restaurant_names_idx", "Restaurant with this name is already exists",
             "restaurant_dishes_idx", "Dish with this name is already exists in the restaurant menu for this date",
@@ -76,6 +77,12 @@ public class ExceptionInfoHandler {
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
     public ErrorInfo illegalRequestDataError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN) //403
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorInfo accessDeniedError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, false, ACCESS_DENIED);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

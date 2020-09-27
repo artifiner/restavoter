@@ -16,8 +16,8 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.javawebinar.restavoter.TestUtil.validateRootCause;
 import static ru.javawebinar.restavoter.UserTestData.*;
-import static ru.javawebinar.restavoter.util.ValidationUtil.getRootCause;
 
 @SpringJUnitConfig(locations = {
         "classpath:spring/spring-app.xml",
@@ -94,16 +94,4 @@ class UserServiceTest {
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password",  Role.USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ",  Role.USER)), ConstraintViolationException.class);
     }
-
-    //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
-    public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
-        assertThrows(rootExceptionClass, () -> {
-            try {
-                runnable.run();
-            } catch (Exception e) {
-                throw getRootCause(e);
-            }
-        });
-    }
-
 }

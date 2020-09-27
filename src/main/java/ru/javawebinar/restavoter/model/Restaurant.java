@@ -12,9 +12,8 @@ public class Restaurant extends AbstractNamedEntity {
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, List<Dish> dishes) {
+    public Restaurant(Integer id, String name) {
         super(id, name);
-        this.dishes = dishes;
     }
 
     public List<Dish> getDishes() {
