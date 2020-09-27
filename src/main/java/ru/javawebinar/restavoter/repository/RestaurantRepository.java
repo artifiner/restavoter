@@ -16,12 +16,12 @@ public class RestaurantRepository {
         this.repository = repository;
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @CacheEvict(value = {"restaurants", "restaurantsWithDishes"}, allEntries = true)
     public Restaurant save(Restaurant restaurant) {
         return repository.save(restaurant);
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @CacheEvict(value = {"restaurants", "restaurantsWithDishes"}, allEntries = true)
     public boolean delete(int id) {
         return repository.delete(id) != 0;
     }
@@ -31,7 +31,7 @@ public class RestaurantRepository {
         return repository.findById(id).orElse(null);
     }
 
-    @Cacheable("restaurants")
+    @Cacheable("restaurantsWithDishes")
     public List<Restaurant> getAllWithDishesByDate(LocalDate date) {
         return repository.getAllWithDishesByDate(date);
     }
