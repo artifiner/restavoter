@@ -23,6 +23,7 @@ import ru.javawebinar.restavoter.util.exception.NotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+import static ru.javawebinar.restavoter.util.ValidationUtil.getRootCause;
 import static ru.javawebinar.restavoter.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -95,15 +96,6 @@ public class ExceptionInfoHandler {
                 details.length != 0 ? details : new String[]{getMessage(rootCause)});
     }
 
-    //  http://stackoverflow.com/a/28565320/548473
-    private static Throwable getRootCause(Throwable t) {
-        Throwable result = t;
-        Throwable cause;
-        while (null != (cause = result.getCause()) && (result != cause)) {
-            result = cause;
-        }
-        return result;
-    }
 
     private static String getMessage(Throwable e) {
         return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
