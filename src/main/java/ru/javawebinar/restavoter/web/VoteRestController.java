@@ -31,7 +31,7 @@ public class VoteRestController {
     }
 
     @GetMapping
-    public List<Vote> getAll() {
+    public List<Vote> getAllVotes() {
         return repository.getAll();
     }
 

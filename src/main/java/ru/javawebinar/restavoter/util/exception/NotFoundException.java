@@ -1,4 +1,4 @@
-package ru.javawebinar.restavoter.util;
+package ru.javawebinar.restavoter.util.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

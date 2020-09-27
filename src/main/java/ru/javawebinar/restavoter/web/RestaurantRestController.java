@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,7 +16,7 @@ import ru.javawebinar.restavoter.model.Vote;
 import ru.javawebinar.restavoter.repository.DishRepository;
 import ru.javawebinar.restavoter.repository.RestaurantRepository;
 import ru.javawebinar.restavoter.repository.VoteRepository;
-import ru.javawebinar.restavoter.util.DeadlinePassedException;
+import ru.javawebinar.restavoter.util.exception.DeadlinePassedException;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import static ru.javawebinar.restavoter.util.ValidationUtil.*;
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantRestController {
     public static final String REST_URL = "/rest/restaurants";
+    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
 
     private final RestaurantRepository repository;
     private final DishRepository dishRepository;
@@ -82,19 +84,20 @@ public class RestaurantRestController {
 
     @GetMapping("/{id}/menu")
     public List<Dish> getDailyMenu(@PathVariable int id) {
-        return dishRepository.getAllByRestaurantToday(id, LocalDateTime.now());
+        return dishRepository.getAllByRestaurantIdAndDate(id, LocalDateTime.now());
     }
 
     @PostMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @Transactional
     public void vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authorizedUser) {
         Restaurant restaurant = checkNotFoundWithId(repository.get(id), id);
         LocalDateTime now = LocalDateTime.now();
-        Vote vote = voteRepository.getByUserIdToday(authorizedUser.getId(), now);
+        Vote vote = voteRepository.getByUserIdAndDate(authorizedUser.getId(), now);
         if (vote == null) {
             vote = new Vote(null, now, authorizedUser.getUser(), restaurant);
         } else {
-            LocalDateTime deadline = LocalDateTime.of(now.toLocalDate(), LocalTime.of(11, 0));
+            LocalDateTime deadline = LocalDateTime.of(now.toLocalDate(), VOTE_DEADLINE);
             if (now.isBefore(deadline)) {
                 vote.setRestaurant(restaurant);
                 vote.setDateTime(now);

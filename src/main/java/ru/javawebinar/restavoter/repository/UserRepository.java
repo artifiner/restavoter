@@ -6,7 +6,7 @@ import ru.javawebinar.restavoter.model.User;
 import java.util.List;
 
 @Repository
-public class UserRepository{
+public class UserRepository {
     private final UserJpaRepository repository;
 
     public UserRepository(UserJpaRepository repository) {
@@ -18,12 +18,7 @@ public class UserRepository{
     }
 
     public boolean delete(int id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+        return repository.delete(id) != 0;
     }
 
     public User get(int id) {

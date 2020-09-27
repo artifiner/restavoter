@@ -1,6 +1,8 @@
 package ru.javawebinar.restavoter.util;
 
 import ru.javawebinar.restavoter.HasId;
+import ru.javawebinar.restavoter.util.exception.IllegalRequestDataException;
+import ru.javawebinar.restavoter.util.exception.NotFoundException;
 
 public class ValidationUtil {
     public static <T> T checkNotFoundWithId(T object, int id) {
@@ -25,7 +27,7 @@ public class ValidationUtil {
 
     public static void checkNew(HasId bean) {
         if (!bean.isNew()) {
-            throw new IllegalArgumentException(bean + " must be new (id=null)");
+            throw new IllegalRequestDataException(bean + " must be new (id=null)");
         }
     }
 
@@ -34,8 +36,22 @@ public class ValidationUtil {
         if (bean.isNew()) {
             bean.setId(id);
         } else if (bean.id() != id) {
-            throw new IllegalArgumentException(bean + " must be with id=" + id);
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
         }
     }
 
+    //  http://stackoverflow.com/a/28565320/548473
+    public static Throwable getRootCause(Throwable t) {
+        Throwable result = t;
+        Throwable cause;
+
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
+    }
+
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
 }
