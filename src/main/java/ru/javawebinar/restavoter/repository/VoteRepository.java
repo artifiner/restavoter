@@ -3,8 +3,7 @@ package ru.javawebinar.restavoter.repository;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.restavoter.model.Vote;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -20,21 +19,15 @@ public class VoteRepository {
     }
 
     public boolean delete(int id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+        return repository.delete(id) != 0;
     }
 
     public Vote get(int id) {
         return repository.findById(id).orElse(null);
     }
 
-    public Vote getByUserIdAndDate(int userId, LocalDateTime now) {
-        LocalDateTime today = now.truncatedTo(ChronoUnit.DAYS);
-        return repository.getByUserIdAndDateTimeBetween(userId, today, today.plusDays(1));
+    public Vote getByUserIdAndDate(int userId, LocalDate now) {
+        return repository.getByUserIdAndDate(userId, now);
     }
 
     public List<Vote> getAll() {

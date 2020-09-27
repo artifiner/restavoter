@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.restavoter.model.Dish;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DishJpaRepository extends JpaRepository<Dish, Integer> {
@@ -16,5 +16,5 @@ public interface DishJpaRepository extends JpaRepository<Dish, Integer> {
     @Query("DELETE FROM Dish d WHERE d.id=:id")
     int delete(@Param("id") int id);
 
-    List<Dish> getAllByRestaurantIdAndDateTimeBetween(Integer userId, LocalDateTime startDay, LocalDateTime endDay);
+    List<Dish> getAllByRestaurantIdAndDate(Integer userId, LocalDate date);
 }

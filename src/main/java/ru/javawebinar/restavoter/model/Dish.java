@@ -6,18 +6,19 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "dishes")
+@Table(name = "dishes",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "name", "actual_date"}, name = "restaurant_dishes_idx")})
 public class Dish extends AbstractNamedEntity {
     @Column(name = "price", nullable = false)
     @NotNull
     private Integer price;
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "actual_date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -28,10 +29,10 @@ public class Dish extends AbstractNamedEntity {
     public Dish() {
     }
 
-    public Dish(Integer id, String name, @NotNull Integer price, @NotNull LocalDateTime dateTime, Restaurant restaurant) {
+    public Dish(Integer id, String name, @NotNull Integer price, @NotNull LocalDate date, Restaurant restaurant) {
         super(id, name);
         this.price = price;
-        this.dateTime = dateTime;
+        this.date = date;
         this.restaurant = restaurant;
     }
 
@@ -43,12 +44,12 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Restaurant getRestaurant() {
@@ -65,7 +66,7 @@ public class Dish extends AbstractNamedEntity {
                 "id=" + id +
                 ", name=" + name +
                 ", price=" + price +
-                ", dateTime=" + dateTime +
+                ", date=" + date +
                 '}';
     }
 }

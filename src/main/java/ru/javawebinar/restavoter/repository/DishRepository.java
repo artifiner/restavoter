@@ -5,8 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.restavoter.model.Dish;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -33,9 +32,8 @@ public class DishRepository {
     }
 
     @Cacheable("dishes")
-    public List<Dish> getAllByRestaurantIdAndDate(int restaurantId, LocalDateTime now) {
-        LocalDateTime today = now.truncatedTo(ChronoUnit.DAYS);
-        return repository.getAllByRestaurantIdAndDateTimeBetween(restaurantId, today, today.plusDays(1));
+    public List<Dish> getAllByRestaurantIdAndDate(int restaurantId, LocalDate date) {
+        return repository.getAllByRestaurantIdAndDate(restaurantId, date);
     }
 
     @Cacheable("dishes")

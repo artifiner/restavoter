@@ -19,10 +19,11 @@ VALUES ('KFC'),
        ('Il Patio'),
        ('Little Osaka');
 
-INSERT INTO dishes (name, price, date_time, restaurant_id)
-VALUES ('Chicken Burger', 5000, '2020-09-08 10:00:00', 100002),
-       ('Wings', 7000, '2020-09-08 10:00:00', 100002),
-       ('Carbonara', 25000, '2020-09-08 10:00:00', 100003),
-       ('Salmon', 45000, '2020-09-08 10:00:00', 100003),
-       ('Sushi', 20000, '2020-09-08 10:00:00', 100004),
-       ('Tom Yam', 30000, '2020-09-08 10:00:00', 100004);
+INSERT INTO dishes (name, price, actual_date, restaurant_id)
+VALUES ('Chicken Burger', 5000, CURRENT_DATE, 100002),
+       ('Wings', 7000, CURRENT_DATE, 100002),
+       ('Carbonara', 25000, CURRENT_DATE, 100003),
+       ('Salmon', 45000, CURRENT_DATE, 100003),
+       ('Sushi', 20000, CURRENT_DATE, 100004),
+       ('Tom Yam', 30000, CURRENT_DATE, 100004);
+

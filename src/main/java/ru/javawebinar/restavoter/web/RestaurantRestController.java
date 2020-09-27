@@ -19,7 +19,7 @@ import ru.javawebinar.restavoter.repository.VoteRepository;
 import ru.javawebinar.restavoter.util.exception.DeadlinePassedException;
 
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class RestaurantRestController {
 
     @GetMapping("/{id}/menu")
     public List<Dish> getDailyMenu(@PathVariable int id) {
-        return dishRepository.getAllByRestaurantIdAndDate(id, LocalDateTime.now());
+        return dishRepository.getAllByRestaurantIdAndDate(id, LocalDate.now());
     }
 
     @PostMapping(value = "/{id}")
@@ -92,17 +92,17 @@ public class RestaurantRestController {
     @Transactional
     public void vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authorizedUser) {
         Restaurant restaurant = checkNotFoundWithId(repository.get(id), id);
-        LocalDateTime now = LocalDateTime.now();
-        Vote vote = voteRepository.getByUserIdAndDate(authorizedUser.getId(), now);
+        LocalDate today = LocalDate.now();
+        Vote vote = voteRepository.getByUserIdAndDate(authorizedUser.getId(), today);
         if (vote == null) {
-            vote = new Vote(null, now, authorizedUser.getUser(), restaurant);
+            vote = new Vote(null, today, authorizedUser.getUser(), restaurant);
         } else {
-            LocalDateTime deadline = LocalDateTime.of(now.toLocalDate(), VOTE_DEADLINE);
-            if (now.isBefore(deadline)) {
+            LocalTime now = LocalTime.now();
+            if (now.isBefore(VOTE_DEADLINE)) {
                 vote.setRestaurant(restaurant);
-                vote.setDateTime(now);
+                vote.setDate(today);
             } else {
-                throw new DeadlinePassedException("You can't change your vote after 11:00");
+                throw new DeadlinePassedException("You can't change your vote after " + VOTE_DEADLINE);
             }
         }
         voteRepository.save(vote);
