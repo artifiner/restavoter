@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.restavoter.model.Vote;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface VoteJpaRepository extends JpaRepository<Vote, Integer> {
     @Transactional
@@ -16,4 +17,6 @@ public interface VoteJpaRepository extends JpaRepository<Vote, Integer> {
     int delete(@Param("id") int id);
 
     Vote getByUserIdAndDate(Integer userId, LocalDate date);
+
+    List<Vote> getAllByDate(LocalDate date);
 }

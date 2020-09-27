@@ -29,17 +29,13 @@ import static ru.javawebinar.restavoter.util.ValidationUtil.*;
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantRestController {
     public static final String REST_URL = "/rest/restaurants";
-    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
 
     private final RestaurantRepository repository;
     private final DishRepository dishRepository;
-    private final VoteRepository voteRepository;
 
-    public RestaurantRestController(RestaurantRepository repository,
-                                    DishRepository dishRepository, VoteRepository voteRepository) {
+    public RestaurantRestController(RestaurantRepository repository, DishRepository dishRepository) {
         this.repository = repository;
         this.dishRepository = dishRepository;
-        this.voteRepository = voteRepository;
     }
 
     @GetMapping("/{id}")
@@ -86,26 +82,4 @@ public class RestaurantRestController {
     public List<Dish> getDailyMenu(@PathVariable int id) {
         return dishRepository.getAllByRestaurantIdAndDate(id, LocalDate.now());
     }
-
-    @PostMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @Transactional
-    public void vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authorizedUser) {
-        Restaurant restaurant = checkNotFoundWithId(repository.get(id), id);
-        LocalDate today = LocalDate.now();
-        Vote vote = voteRepository.getByUserIdAndDate(authorizedUser.getId(), today);
-        if (vote == null) {
-            vote = new Vote(null, today, authorizedUser.getUser(), restaurant);
-        } else {
-            LocalTime now = LocalTime.now();
-            if (now.isBefore(VOTE_DEADLINE)) {
-                vote.setRestaurant(restaurant);
-                vote.setDate(today);
-            } else {
-                throw new DeadlinePassedException("You can't change your vote after " + VOTE_DEADLINE);
-            }
-        }
-        voteRepository.save(vote);
-    }
-
 }

@@ -30,6 +30,10 @@ public class VoteRepository {
         return repository.getByUserIdAndDate(userId, now);
     }
 
+    public List<Vote> getAllByDate(LocalDate date) {
+        return repository.getAllByDate(date);
+    }
+
     public List<Vote> getAll() {
         return repository.findAll();
     }

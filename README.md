@@ -17,7 +17,6 @@ Each restaurant provides a new menu each day.
     - /{id} GET - Get the restaurant with id = {id}
     - GET - Get a full list of restaurants
     - /{id}/menu GET - Get a daily menu (list of dishes) for the restaurant with id = {id}
-    - /{id} POST - Vote for the restaurant with id = {id}
     - POST - Create a restaurant (role ADMIN required)
     - /{id} PUT - Update the restaurant with id = {id} (role ADMIN required)
     - /{id} DELETE - Delete the restaurant with id = {id} (role ADMIN required)
@@ -28,6 +27,7 @@ Each restaurant provides a new menu each day.
     - /{id} PUT - Update the dish with id = {id} (role ADMIN required)
     - /{ud} DELETE - Delete the dish with id = {id} (role ADMIN required)
  * /rest/votes (role ADMIN required)
+    - /{id} POST - Vote for the restaurant with id = {id}
     - /{id} GET - Get the vote with id = {id}
     - GET - Get a full list of votes
 
@@ -48,3 +48,5 @@ Each restaurant provides a new menu each day.
 #### get dish 100009
 `curl -s http://localhost:8080/restavoter/rest/dishes/100009 --user user@yandex.ru:password`
 
+#### vote for the restaurant 100004
+`curl -s -X POST http://localhost:8080/restavoter/rest/votes/100004 --user user@yandex.ru:password`
